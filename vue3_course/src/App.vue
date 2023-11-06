@@ -1,6 +1,7 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
+    <my-button @click="fetchPosts">Получить посты</my-button>
     <my-button
     @click="showDialog"
     style="margin: 15px 0;"
@@ -22,6 +23,8 @@
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import axios from 'axios';
+
 export default {
   components: {
     PostList,
@@ -29,10 +32,7 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "Javascript", body: "Описание поста" },
-        { id: 2, title: "Javascript 2", body: "Описание поста 2" },
-        { id: 3, title: "Javascript 3", body: "Описание поста 3" },
+      posts: [        
       ],
       dialogVisible: false
     };
@@ -47,6 +47,16 @@ export default {
     },
     showDialog(){
         this.dialogVisible = true;
+    },
+    async fetchPosts(){
+        try {
+            const responce = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+            console.log(responce);
+            this.posts = responce.data;
+        }
+        catch(e) {
+            alert('Ошибка');
+        }
     }
   },
 };
