@@ -106,8 +106,7 @@ export default {
     },
      async loadMorePosts(){
         try {
-          this.page += 1;
-            this.isPostsLoading = true;
+          this.page += 1;           
             const responce = await axios.get('https://jsonplaceholder.typicode.com/posts', {
               params: {
                 _page: this.page,
@@ -121,10 +120,7 @@ export default {
         catch(e) {
             alert('Ошибка');
             console.log(e);
-        }
-        finally {
-            this.isPostsLoading = false;
-        }
+        }       
     }
   },
   mounted(){
@@ -135,7 +131,7 @@ export default {
     }
 
     const callback = (entries, observer) => {
-      if (entries[0].isIntersecting){
+      if (entries[0].isIntersecting && this.page < this.totalPages){
         this.loadMorePosts();
       }
     };
