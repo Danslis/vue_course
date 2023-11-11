@@ -4,6 +4,7 @@
     <my-input
       v-model="searchQuery"
       placeholder = "Поиск..."
+        v-focus
     />
     <div class="app__btns">
        <my-button
@@ -29,20 +30,7 @@
     @remove="removePost" 
     v-if="!isPostsLoading"/>
     <div v-else>Идет загрузка...</div>
-    <div ref="observer" class="observer"></div>
-    <!-- <div class="page__wrapper">
-      <div 
-      v-for="pageNumber in totalPages"
-      :key="pageNumber"
-      class="page"
-      :class="{
-        'current-page': page === pageNumber
-      }"
-      @click="changePage(pageNumber)">
-      {{pageNumber}}
-      
-      </div>
-    </div> -->
+    <div v-intersection="loadMorePosts" class="observer"></div>  
   </div>
 </template>
 
@@ -124,19 +112,7 @@ export default {
     }
   },
   mounted(){
-    this.fetchPosts();
-    const options = {     
-      rootMargin: '0px',
-      threshould: 1.0
-    }
-
-    const callback = (entries, observer) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages){
-        this.loadMorePosts();
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
+    this.fetchPosts();    
   },
   computed: {
     sortedPosts() {
